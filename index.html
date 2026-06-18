@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Player</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+}
+
+header{
+    background:#111827;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.form{
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.player-wrapper{
+    position:relative;
+    width:100%;
+    padding-bottom:56.25%;
+    background:#000;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.player-wrapper iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Media Streaming Portal</h1>
+</header>
+
+<div class="container">
+
+    <div class="form">
+        <label>Content Type</label>
+        <select id="type">
+            <option value="movie">Movie</option>
+            <option value="tv">TV Show</option>
+        </select>
+
+        <label>ID (IMDb or TMDB)</label>
+        <input type="text" id="contentId" placeholder="tt1234567">
+
+        <div id="tvFields" style="display:none;">
+            <label>Season</label>
+            <input type="number" id="season" value="1">
+
+            <label>Episode</label>
+            <input type="number" id="episode" value="1">
+        </div>
+
+        <button onclick="loadVideo()">Load</button>
+    </div>
+
+    <div class="player-wrapper">
+        <iframe
+            id="player"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+</div>
+
+<script>
+const typeSelect = document.getElementById("type");
+const tvFields = document.getElementById("tvFields");
+
+typeSelect.addEventListener("change", () => {
+    tvFields.style.display =
+        typeSelect.value === "tv" ? "block" : "none";
+});
+
+function loadVideo() {
+
+    const type = document.getElementById("type").value;
+    const id = document.getElementById("contentId").value.trim();
+
+    if(!id){
+        alert("Enter a valid ID");
+        return;
+    }
+
+    let url = "";
+
+    if(type === "movie"){
+        url = `https://embedmaster.link/movie/${id}`;
+    }else{
+        const season = document.getElementById("season").value;
+        const episode = document.getElementById("episode").value;
+
+        url = `https://embedmaster.link/tv/${id}/${season}/${episode}`;
+    }
+
+    document.getElementById("player").src = url;
+}
+</script>
+
+</body>
+</html>
